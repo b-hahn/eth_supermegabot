@@ -60,7 +60,8 @@ bool SmbController::readWheelSpeeds() {
 		
     int leftSpeedResult, leftSpeedStatus = -1;
     double leftSpeed;
-    leftSpeedStatus = serialDevice->GetValue(_S, 1, leftSpeedResult);
+    leftSpeedStatus = serialDevice->GetValue(_S, 2, leftSpeedResult);
+    leftSpeedResult = - leftSpeedResult;
     if(leftSpeedStatus == RQ_SUCCESS) {
         leftSpeed = leftSpeedResult;
         leftSpeed *= rpmToRps_;
@@ -72,7 +73,8 @@ bool SmbController::readWheelSpeeds() {
 
     int rightSpeedResult, rightSpeedStatus = -1;
     double rightSpeed;
-    rightSpeedStatus = serialDevice->GetValue(_S, 2, rightSpeedResult);
+    rightSpeedStatus = serialDevice->GetValue(_S, 1, rightSpeedResult);
+    rightSpeedResult = rightSpeedResult;
     if(rightSpeedStatus == RQ_SUCCESS) {
         rightSpeed = -rightSpeedResult; //Minus so that positive speed is in forward direction
         rightSpeed *= rpmToRps_;
@@ -135,8 +137,8 @@ bool SmbController::setDesiredCommands()
 	switch(mode_)
 	{
 	case CLOSED_LOOP_SPEED:
-		if (!setVelocityImpl(des_velocity_motor1_, 1)) res = false;
-        if (!setVelocityImpl(des_velocity_motor2_, 2)) res = false;
+		if (!setVelocityImpl(-des_velocity_motor1_, 1)) res = false;
+		if (!setVelocityImpl(-des_velocity_motor2_, 2)) res = false;
 		break;
 	case TORQUE:
         if (!setTorqueImpl(des_tau_motor1_, 1)) res = false;
