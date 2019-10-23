@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<package format="2">
+
+  <name>smb_controller_v2</name>
+  <version>0.1.1</version>
+  <description>The supermegabot controller v2 package</description>
+  
+  <license>Proprietary</license>
+  <maintainer email="tsandy@mavt.ethz.ch">Tim Sandy</maintainer>
+  <author email="tsandy@mavt.ethz.ch">Tim Sandy</author>
+  <url type="website">https://bitbucket.org/leggedrobotics/smb_lowlevel_controller/smb_lowlevel_controller</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>glog_catkin</depend>
+  <!-- <depend>smb_common</depend> -->
+  <!-- <depend>smb_description</depend> -->
+  <depend>smb_driver</depend>
+  <!-- <depend>smb_ros</depend> -->
+  <!-- <depend>message_logger</depend> -->
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>roslib</depend>
+  <!-- <depend>signal_logger</depend> -->
+  <!-- <depend>signal_logger_ros</depend> -->
+</package>
