@@ -49,6 +49,7 @@ void SmbControllerV2::run()
       }
       period_start = std::chrono::steady_clock::now();
       if (period_start - initial_start > std::chrono::nanoseconds(10000000l)) {
+          VLOG(4) << "period_start: " << period_start.count() << ", initial_start: " << initial_start.count();
           break;
       }
     }
