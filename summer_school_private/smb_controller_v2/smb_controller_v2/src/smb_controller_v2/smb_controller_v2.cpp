@@ -58,7 +58,7 @@ void SmbControllerV2::run()
       }
     }
 
-    smb_->setVelocity(5);
+    smb_->setVelocity(50);
     sleepms(3000);
     smb_->setVelocity(0);
 

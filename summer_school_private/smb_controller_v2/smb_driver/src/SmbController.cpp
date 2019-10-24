@@ -210,11 +210,7 @@ void SmbController::receiveData(void *context) {
     }
 
 		//Issue the commands
-		std::cout << "instance->sendCommands_: " << instance->sendCommands_ << "\n";
 		if (instance->sendCommands_) {
-			std::cout
-				<< "instance->setDesiredCommands(): " << instance->setDesiredCommands()
-				<< "\n";
 			if (!instance->setDesiredCommands())
 			res = false;
     	}
