@@ -540,6 +540,7 @@ bool SmbController::setModeImpl(int mode, int motor)
 
 bool SmbController::setVelocityImpl(double vel, int motor)
 {
+	std::cout << "Setting motor " << motor << " velocity to " << vel << ".\n";
 	int res = sendGoCommand(vel, motor);
 	if(res != RQ_SUCCESS) {
         printf("Error SmbController::setVelocityImpl: Set Commands failed for motor %i, returning %i \n", motor, res);

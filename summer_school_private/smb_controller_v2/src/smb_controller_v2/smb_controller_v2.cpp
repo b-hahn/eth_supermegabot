@@ -48,7 +48,7 @@ void SmbControllerV2::run()
                 << ", battery voltage: " << battery_voltage << ".";
         period_start = std::chrono::steady_clock::now();
       }
-      if (period_start - initial_start > std::chrono::seconds(10l)) {
+      if (period_start - initial_start > std::chrono::seconds(3l)) {
         VLOG(4) << "Time since initial_start: "
                 << std::chrono::duration_cast<std::chrono::microseconds>(
                        period_start - initial_start)
