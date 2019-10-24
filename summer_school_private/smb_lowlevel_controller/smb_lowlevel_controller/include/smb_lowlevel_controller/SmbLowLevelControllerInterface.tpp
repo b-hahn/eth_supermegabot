@@ -63,37 +63,37 @@ namespace smb_lowlevel_controller {
             case SmbMode::MODE_WHEEL_VELOCITY:
               smb_->setMode(smb_driver::CLOSED_LOOP_SPEED);
               break;
-//          case SmbMode::MODE_WHEEL_TORQUE:
-//            smb_->setMode(TORQUE);
-//            break;
-            case SmbMode::WHEEL_DC_CMD:
-              smb_->setMode(smb_driver::OPEN_LOOP);
-              break;
-            default:
-              MELO_WARN_THROTTLE(1.0, "[SmbLowLevelControllerInterface] Specified SmbMode cannot be handled by the controller. mode=%d", currentControlMode);
+  //          case SmbMode::MODE_WHEEL_TORQUE:
+  //            smb_->setMode(TORQUE);
+  //            break;
+              case SmbMode::WHEEL_DC_CMD:
+                smb_->setMode(smb_driver::OPEN_LOOP);
+                break;
+              default:
+                MELO_WARN_THROTTLE(1.0, "[SmbLowLevelControllerInterface] Specified SmbMode cannot be handled by the controller. mode=%d", currentControlMode);
+            }
+
+            lastControlMode_ = currentControlMode;
           }
-
-          lastControlMode_ = currentControlMode;
         }
-      }
-      firstActuator = false;
+        firstActuator = false;
 
-      //Set freeze on both motors when a freeze command is first received
-      if (currentControlMode == SmbMode::FREEZE) {
-        smb_->setFreeze();
-        break;
-      }
+        //Set freeze on both motors when a freeze command is first received
+        if (currentControlMode == SmbMode::FREEZE) {
+          smb_->setFreeze();
+          break;
+        }
 
-      //Only use the front wheel commands since both front and back wheels are wired to the same motor controller output
-      int wheelNumber;
-      if (strcmp(actuatorKey.getName(),"LF_WHEEL") == 0) // || strcmp(actuatorKey.getName(),"LH_WHEEL") == 0 )
-        wheelNumber = 1;
-      else if (strcmp(actuatorKey.getName(),"RF_WHEEL") == 0) // || strcmp(actuatorKey.getName(),"RH_WHEEL") == 0 )
-        wheelNumber = 2;
-      else {
-//      MELO_WARN_STREAM("[SmbLowLevelControllerInterface] Unidentified actuatorKey name found! " << actuatorKey.getName());
-        continue;
-      }
+        //Only use the front wheel commands since both front and back wheels are wired to the same motor controller output
+        int wheelNumber;
+        if (strcmp(actuatorKey.getName(),"LF_WHEEL") == 0) // || strcmp(actuatorKey.getName(),"LH_WHEEL") == 0 )
+          wheelNumber = 1;
+        else if (strcmp(actuatorKey.getName(),"RF_WHEEL") == 0) // || strcmp(actuatorKey.getName(),"RH_WHEEL") == 0 )
+          wheelNumber = 2;
+        else {
+  //      MELO_WARN_STREAM("[SmbLowLevelControllerInterface] Unidentified actuatorKey name found! " << actuatorKey.getName());
+          continue;
+        }
 
       switch(currentControlMode) {
         case SmbMode::MODE_WHEEL_VELOCITY:
@@ -111,7 +111,7 @@ namespace smb_lowlevel_controller {
           break;
       }
     }
-//  MELO_INFO_THROTTLE(1.0, "[SmbLowLevelControllerInterface] leftWheelVelocity=%f, rightWheelVelocity=%f", leftWheelVelocity, rightWheelVelocity);
+  //  MELO_INFO_THROTTLE(1.0, "[SmbLowLevelControllerInterface] leftWheelVelocity=%f, rightWheelVelocity=%f", leftWheelVelocity, rightWheelVelocity);
 
     std::chrono::time_point<std::chrono::steady_clock> startSub, endSub;
     int64_t elapsedSub;

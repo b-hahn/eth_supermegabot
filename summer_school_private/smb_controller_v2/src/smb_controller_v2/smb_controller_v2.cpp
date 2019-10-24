@@ -42,8 +42,8 @@ void SmbControllerV2::run()
       if (std::chrono::steady_clock::now() - period_start > t_period) {
         VLOG(4) << "[SmbControllerV2] run";
         double speed_l, speed_r, battery_voltage;
-        smb_->getWheelSpeeds(speed_l, speed_r, 500000);
-        smb_->getBatteryVoltage(battery_voltage, 500000);
+        smb_->getWheelSpeeds(speed_l, speed_r, 500);
+        smb_->getBatteryVoltage(battery_voltage, 500);
         VLOG(2) << "Wheel speed l: " << speed_l << ", speed r: " << speed_r
                 << ", battery voltage: " << battery_voltage << ".";
         period_start = std::chrono::steady_clock::now();
@@ -57,6 +57,12 @@ void SmbControllerV2::run()
         break;
       }
     }
+
+    smb_->setVelocity(5);
+    sleepms(3000);
+    smb_->setVelocity(0);
+
+
     VLOG(4) << "Finished while loop.";
 }
 
