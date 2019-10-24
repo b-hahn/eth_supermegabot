@@ -34,6 +34,11 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
 void SmbControllerV2::run()
 {
     VLOG(4) << "[SmbControllerV2] run";
+    double speed_l, speed_r, battery_voltage;
+    smb_->getWheelSpeeds(speed_l, speed_r, 500000);
+    smb_->getBatteryVoltage(battery_voltage, 500000);
+    VLOG(2) << "Wheel speed l: " << speed_l << ", speed r: " << speed_r
+            << ", battery voltage: " << battery_voltage << ".";
 }
 
 void SmbControllerV2::preCleanup()

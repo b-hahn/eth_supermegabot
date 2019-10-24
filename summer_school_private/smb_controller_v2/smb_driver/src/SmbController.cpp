@@ -195,7 +195,7 @@ void SmbController::receiveData(void *context) {
 	auto cycleCountStartTime_ = std::chrono::high_resolution_clock::now();
 	int cycleCount_ = 0;
 	instance->cycleCountPeriod_Us_ = 5000000.0;
-  instance->t_lastSuccessfulCycle_ = cycleCountStartTime_;
+  	instance->t_lastSuccessfulCycle_ = cycleCountStartTime_;
 
 	while (!instance->stopAcquisition_){
     auto startLoop_ = std::chrono::high_resolution_clock::now();
@@ -210,9 +210,9 @@ void SmbController::receiveData(void *context) {
 
 		//Issue the commands
 		if (instance->sendCommands_) {
-      if (!instance->setDesiredCommands())
-        res = false;
-    }
+     	if (!instance->setDesiredCommands())
+            res = false;
+    	}
 
 		//Send additional commands if desired
 		//Currently just setting the command mode is supported
