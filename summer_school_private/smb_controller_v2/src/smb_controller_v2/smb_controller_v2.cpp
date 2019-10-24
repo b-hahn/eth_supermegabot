@@ -46,8 +46,8 @@ void SmbControllerV2::run()
         smb_->getBatteryVoltage(battery_voltage, 500000);
         VLOG(2) << "Wheel speed l: " << speed_l << ", speed r: " << speed_r
                 << ", battery voltage: " << battery_voltage << ".";
+        period_start = std::chrono::steady_clock::now();
       }
-      period_start = std::chrono::steady_clock::now();
       if (period_start - initial_start > std::chrono::seconds(10l)) {
         VLOG(4) << "Time since initial_start: "
                 << std::chrono::duration_cast<std::chrono::microseconds>(
