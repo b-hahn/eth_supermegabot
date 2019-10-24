@@ -28,8 +28,8 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "smb_controller_v2");
     ros::NodeHandle nh;
 
-    bool commandSmb;
-    nh.param<bool>("command_smb",commandSmb, true);
+    bool commandSmb = true;
+    // nh.param<bool>("command_smb",commandSmb, true);
 
     smb_controller_v2::SmbControllerV2 smb_controller;
 
@@ -38,7 +38,5 @@ int main(int argc, char** argv)
     }
     smb_controller.cleanup();
 
-//   any_node::Nodewrap<smb_lowlevel_controller::SmbLowLevelController> node(argc, argv, "smb_lowlevel_controller", 2); // use 2 spinner thread
-//   node.execute(); // update thread won't be executed
   return 0;
 }

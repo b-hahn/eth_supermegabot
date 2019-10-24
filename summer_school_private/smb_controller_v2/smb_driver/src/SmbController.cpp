@@ -129,6 +129,7 @@ bool SmbController::readBatteryVoltage() {
 
 bool SmbController::setDesiredCommands()
 {
+	std::cout << "setDesiredCommands()\n";
     bool res = true;
 
 	acquireMutex(desiredCmdMutex_, 0);
@@ -209,9 +210,13 @@ void SmbController::receiveData(void *context) {
     }
 
 		//Issue the commands
+		std::cout << "instance->sendCommands_: " << instance->sendCommands_ << "\n";
 		if (instance->sendCommands_) {
-     	if (!instance->setDesiredCommands())
-            res = false;
+			std::cout
+				<< "instance->setDesiredCommands(): " << instance->setDesiredCommands()
+				<< "\n";
+			if (!instance->setDesiredCommands())
+			res = false;
     	}
 
 		//Send additional commands if desired
