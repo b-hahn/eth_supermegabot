@@ -81,7 +81,7 @@ void SmbControllerV2::twistCallback(const geometry_msgs::TwistConstPtr& twist) {
   // TODO(ben): figure out correct way to convert ROS Twist messages to a
   // angular velocity. Not sure what the -1k - 1k range stands for. rad/s?
   smb_->setVelocity(twist->angular.y);
-  sleepms(1000);
+  sleepms(5000);
   smb_->setVelocity(0);
 }
 
