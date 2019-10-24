@@ -129,7 +129,7 @@ bool SmbController::readBatteryVoltage() {
 
 bool SmbController::setDesiredCommands()
 {
-	std::cout << "setDesiredCommands()\n";
+	// std::cout << "setDesiredCommands()\n";
     bool res = true;
 
 	acquireMutex(desiredCmdMutex_, 0);
@@ -541,7 +541,7 @@ bool SmbController::setModeImpl(int mode, int motor)
 
 bool SmbController::setVelocityImpl(double vel, int motor)
 {
-	std::cout << "Setting motor " << motor << " velocity to " << vel << ".\n";
+	VLOG(3) << "Setting motor " << motor << " velocity to " << vel << ".";
 	int res = sendGoCommand(vel, motor);
 	if(res != RQ_SUCCESS) {
         printf("Error SmbController::setVelocityImpl: Set Commands failed for motor %i, returning %i \n", motor, res);

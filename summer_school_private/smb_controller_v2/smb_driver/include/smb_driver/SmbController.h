@@ -8,7 +8,6 @@
 #ifndef INCLUDE_CONTROLLER_H_
 #define INCLUDE_CONTROLLER_H_
 
-#include <ros/ros.h>
 #include <cstring>
 #include <iostream>
 #include <map>
@@ -17,6 +16,8 @@
 #include <unistd.h>
 #include <math.h> //For M_PI
 #include<boost/circular_buffer.hpp>
+#include <glog/logging.h>
+#include <ros/ros.h>
 #include <std_msgs/Float64MultiArray.h>
 
 #include <smb_driver/auxiliaries/interProcessCommunication.h>
