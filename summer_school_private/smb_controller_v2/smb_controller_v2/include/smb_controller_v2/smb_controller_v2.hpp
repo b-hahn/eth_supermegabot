@@ -40,6 +40,7 @@ protected:
 private:
 
     std::mutex smbDriverMutex_;
+    ros::Subscriber wheel_twist_sub;
 
 };
 } // namespace smb_controller_v2

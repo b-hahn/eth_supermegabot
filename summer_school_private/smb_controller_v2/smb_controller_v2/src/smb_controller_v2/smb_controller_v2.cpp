@@ -16,7 +16,7 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
     // Twist message subscriber
     boost::function<void(const geometry_msgs::TwistConstPtr &)> twist_command_callback =
         boost::bind(&SmbControllerV2::twistCallback, this, _1);
-    ros::Subscriber velocity_sub = nh.subscribe("/wheelTwist", 100, twist_command_callback);
+    wheel_twist_sub = nh.subscribe("/wheelTwist", 100, twist_command_callback);
 
     // Initializes communication to the smb
     smb_ =
@@ -70,13 +70,19 @@ void SmbControllerV2::run()
 
 
     // VLOG(4) << "Finished while loop.";
+    VLOG(4) << "starting spin...";
     ros::spin();
+    VLOG(4) << "ending spin...";
 }
 
 // callback for twist messages that send a velocity command to wheels
 void SmbControllerV2::twistCallback(const geometry_msgs::TwistConstPtr& twist) {
   VLOG(4) << "twistCallback!";
-
+  // TODO(ben): figure out correct way to convert ROS Twist messages to a
+  // angular velocity. Not sure what the -1k - 1k range stands for. rad/s?
+  smb_->setVelocity(twist->angular.y);
+  sleepms(1000);
+  smb_->setVelocity(0);
 }
 
 void SmbControllerV2::preCleanup()
