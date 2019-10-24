@@ -13,12 +13,18 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
   lastControlMode_ = smb_common::SmbMode::FREEZE;
 
   try {
+    // Twist message subscriber
+    boost::function<void(const geometry_msgs::TwistConstPtr &)> twist_command_callback =
+        boost::bind(&SmbControllerV2::twistCallback, this, _1);
+    ros::Subscriber velocity_sub = nh.subscribe("/wheelTwist", 100, twist_command_callback);
+
     // Initializes communication to the smb
     smb_ =
         std::make_shared<smb_driver::SmbController>(port, nh, 10, commandSmb);
     smb_->startAcquisition();
     smb_->setMode(smb_driver::CLOSED_LOOP_SPEED);
     lastControlMode_ = smb_common::SmbMode::MODE_WHEEL_VELOCITY;
+
 
     LOG(INFO) << "[SmbControllerInterfaceInterface]: Initialized "
                  "successfully.";
@@ -33,37 +39,44 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
 
 void SmbControllerV2::run()
 {
-    std::chrono::time_point<std::chrono::steady_clock> initial_start, period_start;
-    std::chrono::seconds t_period(1l);
-    period_start = std::chrono::steady_clock::now();
-    initial_start = period_start;
+    // std::chrono::time_point<std::chrono::steady_clock> initial_start, period_start;
+    // std::chrono::seconds t_period(1l);
+    // period_start = std::chrono::steady_clock::now();
+    // initial_start = period_start;
 
-    while (true) {
-      if (std::chrono::steady_clock::now() - period_start > t_period) {
-        VLOG(4) << "[SmbControllerV2] run";
-        double speed_l, speed_r, battery_voltage;
-        smb_->getWheelSpeeds(speed_l, speed_r, 500);
-        smb_->getBatteryVoltage(battery_voltage, 500);
-        VLOG(2) << "Wheel speed l: " << speed_l << ", speed r: " << speed_r
-                << ", battery voltage: " << battery_voltage << ".";
-        period_start = std::chrono::steady_clock::now();
-      }
-      if (period_start - initial_start > std::chrono::seconds(3l)) {
-        VLOG(4) << "Time since initial_start: "
-                << std::chrono::duration_cast<std::chrono::microseconds>(
-                       period_start - initial_start)
-                       .count()
-                << ". ";
-        break;
-      }
-    }
+    // while (true) {
+    //   if (std::chrono::steady_clock::now() - period_start > t_period) {
+    //     VLOG(4) << "[SmbControllerV2] run";
+    //     double speed_l, speed_r, battery_voltage;
+    //     smb_->getWheelSpeeds(speed_l, speed_r, 500);
+    //     smb_->getBatteryVoltage(battery_voltage, 500);
+    //     VLOG(2) << "Wheel speed l: " << speed_l << ", speed r: " << speed_r
+    //             << ", battery voltage: " << battery_voltage << ".";
+    //     period_start = std::chrono::steady_clock::now();
+    //   }
+    //   if (period_start - initial_start > std::chrono::seconds(3l)) {
+    //     VLOG(4) << "Time since initial_start: "
+    //             << std::chrono::duration_cast<std::chrono::microseconds>(
+    //                    period_start - initial_start)
+    //                    .count()
+    //             << ". ";
+    //     break;
+    //   }
+    // }
 
-    smb_->setVelocity(50);
-    sleepms(3000);
-    smb_->setVelocity(0);
+    // smb_->setVelocity(50);
+    // sleepms(3000);
+    // smb_->setVelocity(0);
 
 
-    VLOG(4) << "Finished while loop.";
+    // VLOG(4) << "Finished while loop.";
+    ros::spin();
+}
+
+// callback for twist messages that send a velocity command to wheels
+void SmbControllerV2::twistCallback(const geometry_msgs::TwistConstPtr& twist) {
+  VLOG(4) << "twistCallback!";
+
 }
 
 void SmbControllerV2::preCleanup()

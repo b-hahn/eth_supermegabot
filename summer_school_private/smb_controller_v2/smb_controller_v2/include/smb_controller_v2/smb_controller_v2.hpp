@@ -7,7 +7,9 @@
 #include <glog/logging.h>
 #include <ros/ros.h>
 
-// hard code path in CMakeLists.txt
+#include <boost/bind.hpp>
+#include <geometry_msgs/Twist.h>
+
 #include "SmbModes.hpp"
 #include <smb_driver/SmbController.h>
 
@@ -24,6 +26,8 @@ public:
   void run();
   void cleanup();
   void preCleanup();
+
+  void twistCallback(const geometry_msgs::TwistConstPtr& twist);
 
 protected:
   // subscriber to SmbCommands
