@@ -17,6 +17,11 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
     boost::function<void(const geometry_msgs::TwistConstPtr &)> twist_command_callback =
         boost::bind(&SmbControllerV2::twistCallback, this, _1);
     wheel_twist_sub = nh.subscribe("/wheelTwist", 100, twist_command_callback);
+    
+    // Joystick message subscriber
+    boost::function<void(const sensor_msgs::JoyConstPtr &)> joystick_callback =
+        boost::bind(&SmbControllerV2::joystickCallback, this, _1);
+    joystick_sub = nh.subscribe("/joy", 100, joystick_callback);
 
     // Initializes communication to the smb
     smb_ =
@@ -77,12 +82,26 @@ void SmbControllerV2::run()
 
 // callback for twist messages that send a velocity command to wheels
 void SmbControllerV2::twistCallback(const geometry_msgs::TwistConstPtr& twist) {
-  VLOG(4) << "twistCallback!";
+  VLOG(4) << "twistCallback - currently not ACTIVE!";
+
   // TODO(ben): figure out correct way to convert ROS Twist messages to a
   // angular velocity. Not sure what the -1k - 1k range stands for. rad/s?
-  smb_->setVelocity(twist->angular.y);
-  sleepms(5000);
-  smb_->setVelocity(0);
+
+  // smb_->setVelocity(twist->angular.y);
+  // sleepms(5000);
+  // smb_->setVelocity(0);
+}
+
+// callback for joy messages that send a velocity command to wheels
+void SmbControllerV2::joystickCallback(const sensor_msgs::JoyConstPtr& joystick_input) {
+  VLOG(4) << "joystick Callback!";
+
+  // TODO(ben): figure out correct way to convert ROS Twist messages to a
+  // angular velocity. Not sure what the -1k - 1k range stands for. rad/s?
+  double joystick_to_rad_pers_s_factor = 50.0;
+  smb_->setVelocity(joystick_input->axes[1] * joystick_to_rad_pers_s_factor);
+  // sleepms(5000);
+  // smb_->setVelocity(0);
 }
 
 void SmbControllerV2::preCleanup()

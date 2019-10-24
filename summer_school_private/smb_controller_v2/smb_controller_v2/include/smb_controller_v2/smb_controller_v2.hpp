@@ -9,6 +9,7 @@
 
 #include <boost/bind.hpp>
 #include <geometry_msgs/Twist.h>
+#include <sensor_msgs/Joy.h>
 
 #include "SmbModes.hpp"
 #include <smb_driver/SmbController.h>
@@ -28,6 +29,7 @@ public:
   void preCleanup();
 
   void twistCallback(const geometry_msgs::TwistConstPtr& twist);
+  void joystickCallback(const sensor_msgs::JoyConstPtr& joystick_input);
 
 protected:
   // subscriber to SmbCommands
@@ -41,6 +43,7 @@ private:
 
     std::mutex smbDriverMutex_;
     ros::Subscriber wheel_twist_sub;
+    ros::Subscriber joystick_sub;
 
 };
 } // namespace smb_controller_v2
