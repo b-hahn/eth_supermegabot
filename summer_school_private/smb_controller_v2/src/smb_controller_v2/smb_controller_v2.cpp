@@ -34,7 +34,7 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
 void SmbControllerV2::run()
 {
     std::chrono::time_point<std::chrono::steady_clock> initial_start, period_start;
-    std::chrono::nanoseconds t_period(1000000l);
+    std::chrono::seconds t_period(1l);
     period_start = std::chrono::steady_clock::now();
     initial_start = period_start;
 
