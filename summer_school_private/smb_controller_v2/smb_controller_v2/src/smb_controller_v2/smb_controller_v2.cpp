@@ -87,7 +87,17 @@ void SmbControllerV2::twistCallback(const geometry_msgs::TwistConstPtr& twist) {
   // TODO(ben): figure out correct way to convert ROS Twist messages to a
   // angular velocity. Not sure what the -1k - 1k range stands for. rad/s?
 
-  // smb_->setVelocity(twist->angular.y);
+  // TODO(ben): read in robot parameters from urdf file
+  // constexpr double ws = 0.265 * 2;
+  // const double lwr = 0.19;
+
+  //   // Compute wheels velocities:
+  //   const double vel_left  = (curr_cmd.lin - curr_cmd.ang * ws / 2.0)/lwr;
+  //   const double vel_right = (curr_cmd.lin + curr_cmd.ang * ws / 2.0)/rwr;
+  
+  // //TODO(ben): check how 0/1 motor numbers map to left and right. 
+  // smb_->setVelocity(vel_left, 0);
+  // smb_->setVelocity(vel_right, 1);
   // sleepms(5000);
   // smb_->setVelocity(0);
 }

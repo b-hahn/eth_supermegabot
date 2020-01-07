@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <arg name="ns" value=""/>
+
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 1 base_link map 100" />
+
+  <!-- <node name="move_base" pkg="move_base" type="move_base" output="screen"> -->
+    <!-- <param name="subscribers/smb_state/topic"      value="/state_estimator/smb_state"/> -->
+  <!-- </node> -->
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find smb_controller_v2)/config/urdf/smb.urdf.xacro'" />
+
+  <rosparam command="load" 
+              file="$(find smb_controller_v2)/config/smb_controller_config.yaml"/>
+
+    <!-- <node name="controller_mgr"
+          pkg="controller_manager"
+          type="controller_manager"
+          output="screen"
+          args="load mobile_base_controller"/> -->
+
+  <node name="controller_spawner"
+        pkg="controller_manager"
+        type="spawner"
+        output="screen"
+        ns="smb"
+        args="mobile_base_controller"/>
+
+
+  <!-- <param name="robot_description_old" textfile="$(find smb_controller_v2)/config/urdf/smb.urdf"/> -->
+</launch>

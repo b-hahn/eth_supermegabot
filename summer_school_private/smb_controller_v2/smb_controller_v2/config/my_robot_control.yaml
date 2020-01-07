@@ -1,0 +1,19 @@
+# .yaml config file
+#
+# The PID gains and controller settings must be saved in a yaml file that gets loaded
+# to the param server via the roslaunch file (my_robot_control.launch).
+
+my_robot:
+  # Publish all joint states -----------------------------------
+  # Creates the /joint_states topic necessary in ROS
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+
+  mobile_base_controller:
+    type        : "diff_drive_controller/DiffDriveController"
+    left_wheel  : 'LF_WHEEL'
+    right_wheel : 'RF_WHEEL'
+    publish_rate: 100.0  # default: 50
+    pose_covariance_diagonal : [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
