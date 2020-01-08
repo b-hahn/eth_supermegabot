@@ -14,6 +14,11 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
 
   try {
     // Twist message subscriber
+    boost::function<void(const std_msgs::Float32ConstPtr &)> wheel_velocity_callback =
+        boost::bind(&SmbControllerV2::wheelVelocityCallback, this, _1);
+    wheel_velocity_sub = nh.subscribe("/wheel_velocity", 100, wheel_velocity_callback);
+
+    // Twist message subscriber
     boost::function<void(const geometry_msgs::TwistConstPtr &)> twist_command_callback =
         boost::bind(&SmbControllerV2::twistCallback, this, _1);
     wheel_twist_sub = nh.subscribe("/wheelTwist", 100, twist_command_callback);
@@ -80,6 +85,13 @@ void SmbControllerV2::run()
     VLOG(4) << "ending spin...";
 }
 
+// callback for twist messages that send a velocity command to wheels
+void SmbControllerV2::wheelVelocityCallback(const std_msgs::Float32ConstPtr& wheel_velocity) {
+  VLOG(4) << "wheelVelocityCallback - vel = " << *wheel_velocity;
+  smb_->setVelocity(wheel_velocity * wheel_velocity_factor_, 0);
+  smb_->setVelocity(wheel_velocity * wheel_velocity_factor_, 1);
+
+}
 // callback for twist messages that send a velocity command to wheels
 void SmbControllerV2::twistCallback(const geometry_msgs::TwistConstPtr& twist) {
   VLOG(4) << "twistCallback - currently not ACTIVE!";
