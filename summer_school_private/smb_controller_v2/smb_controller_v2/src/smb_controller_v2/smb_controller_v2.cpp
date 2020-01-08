@@ -113,11 +113,12 @@ void SmbControllerV2::wheelVelocitiesCallback(
   VLOG(4) << "wheelVelocityCallback - right_wheel_velolcity: "
           << wheel_velocities->data[0]
           << ", left_wheel_velocity: " << wheel_velocities->data[1];
+  CHECK_EQ(wheel_velocities->data.size(), 2);
 
   // 0: BOTH_MOTORS, 1: FIRST_MOTOR, 2: SECOND_MOTOR
   // TODO(ben): limit speed of motors?
   smb_->setVelocity(wheel_velocities->data[0] * wheel_velocity_factor_, 1);
-  smb_->setVelocity(wheel_velocities->data[0] * wheel_velocity_factor_, 2);
+  smb_->setVelocity(wheel_velocities->data[1] * wheel_velocity_factor_, 2);
 
 }
 

@@ -64,7 +64,6 @@ public:
    *
    */
   void write() {
-    std::cout << "Writing" << std::endl;
     double diff_ang_speed_left = cmd[0];
     double diff_ang_speed_right = cmd[1];
     limitDifferentialSpeed(diff_ang_speed_left, diff_ang_speed_right);
@@ -74,26 +73,21 @@ public:
 
     std_msgs::Float32MultiArray wheel_velocities_msg;
 
-    std::cout << "Here 0" << std::endl;
     // set up dimensions
     wheel_velocities_msg.layout.dim.push_back(std_msgs::MultiArrayDimension());
     wheel_velocities_msg.layout.dim[0].size = 2;
     wheel_velocities_msg.layout.dim[0].stride = 1;
     wheel_velocities_msg.layout.dim[0].label = "velocities";
-    std::cout << "Here 1" << std::endl;
 
     wheel_velocities_msg.data.clear();
-    std::cout << "1" << std::endl;
     wheel_velocities_msg.data.push_back(diff_ang_speed_left);
-    std::cout << "2" << std::endl;
     wheel_velocities_msg.data.push_back(diff_ang_speed_right);
-    std::cout << "3" << std::endl;
     wheel_velocities_pub_.publish(wheel_velocities_msg);
 
-    left_wheel_vel_msg.data = diff_ang_speed_left;
-    right_wheel_vel_msg.data = diff_ang_speed_right;
-    left_wheel_vel_pub_.publish(left_wheel_vel_msg);
-    right_wheel_vel_pub_.publish(right_wheel_vel_msg);
+    // left_wheel_vel_msg.data = diff_ang_speed_left;
+    // right_wheel_vel_msg.data = diff_ang_speed_right;
+    // left_wheel_vel_pub_.publish(left_wheel_vel_msg);
+    // right_wheel_vel_pub_.publish(right_wheel_vel_msg);
   }
 
   /**

@@ -18,7 +18,7 @@ void controlLoop(MyRobotHWInterface &hw, controller_manager::ControllerManager &
 int main(int argc, char** argv)
 {
     ros::init(argc, argv, "my_robot_base_node");
-    std::cout << "Starting" << std::endl;
+    
     MyRobotHWInterface hw;
     controller_manager::ControllerManager cm(&hw, hw.nh);
 
