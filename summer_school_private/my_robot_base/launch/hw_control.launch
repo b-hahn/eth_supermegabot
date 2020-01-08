@@ -9,7 +9,8 @@
 
     <node name="my_robot_base_node" 
           pkg="my_robot_base" 
-          type="my_robot_base_node"/>
+          type="my_robot_base_node"
+          output="screen"/>
 
     <!-- Load controller config -->
     <rosparam command="load" 

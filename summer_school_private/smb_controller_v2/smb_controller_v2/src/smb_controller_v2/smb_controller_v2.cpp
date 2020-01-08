@@ -13,10 +13,18 @@ bool SmbControllerV2::init(std::string port, ros::NodeHandle &nh,
   lastControlMode_ = smb_common::SmbMode::FREEZE;
 
   try {
-    // Twist message subscriber
-    boost::function<void(const std_msgs::Float32ConstPtr &)> wheel_velocity_callback =
-        boost::bind(&SmbControllerV2::wheelVelocityCallback, this, _1);
-    wheel_velocity_sub = nh.subscribe("/wheel_velocity", 100, wheel_velocity_callback);
+    // Wheel velocity message subscriber
+    // TODO(ben): add sync for left & right msgs
+
+    // message_filters::Subscriber<std_msgs::Float32> right_wheel_velocity_sub(nh, "right_wheel_velocity", 1);
+    // message_filters::Subscriber<std_msgs::Float32> left_wheel_velocity_sub(nh, "left_wheel_velocity", 1);
+    // message_filters::TimeSynchronizer<std_msgs::Float32, std_msgs::Float32>
+    //     sync(right_wheel_velocity_sub, left_wheel_velocity_sub, 10);
+    // sync.registerCallback(boost::bind(&SmbControllerV2::wheelVelocityCallback, this, _1, _2));
+
+    boost::function<void(const std_msgs::Float32MultiArrayConstPtr &)> wheel_velocities_callback =
+        boost::bind(&SmbControllerV2::wheelVelocitiesCallback, this, _1);
+    wheel_velocity_sub = nh.subscribe("/wheel_velocities", 100, wheel_velocities_callback);
 
     // Twist message subscriber
     boost::function<void(const geometry_msgs::TwistConstPtr &)> twist_command_callback =
@@ -86,12 +94,33 @@ void SmbControllerV2::run()
 }
 
 // callback for twist messages that send a velocity command to wheels
-void SmbControllerV2::wheelVelocityCallback(const std_msgs::Float32ConstPtr& wheel_velocity) {
-  VLOG(4) << "wheelVelocityCallback - vel = " << *wheel_velocity;
-  smb_->setVelocity(wheel_velocity->data * wheel_velocity_factor_, 0);
-  smb_->setVelocity(wheel_velocity->data * wheel_velocity_factor_, 1);
+void SmbControllerV2::wheelVelocityCallback(
+    const std_msgs::Float32ConstPtr &right_wheel_velocity,
+    const std_msgs::Float32ConstPtr &left_wheel_velocity) {
+  VLOG(4) << "wheelVelocityCallback - right_wheel_velolcity: "
+          << *right_wheel_velocity
+          << ", left_wheel_velocity: " << *left_wheel_velocity;
+
+  // 0: BOTH_MOTORS, 1: FIRST_MOTOR, 2: SECOND_MOTOR
+  smb_->setVelocity(right_wheel_velocity->data * wheel_velocity_factor_, 1);
+  smb_->setVelocity(left_wheel_velocity->data * wheel_velocity_factor_, 2);
 
 }
+
+// callback for twist messages that send a velocity command to wheels
+void SmbControllerV2::wheelVelocitiesCallback(
+    const std_msgs::Float32MultiArrayConstPtr &wheel_velocities) {
+  VLOG(4) << "wheelVelocityCallback - right_wheel_velolcity: "
+          << wheel_velocities->data[0]
+          << ", left_wheel_velocity: " << wheel_velocities->data[1];
+
+  // 0: BOTH_MOTORS, 1: FIRST_MOTOR, 2: SECOND_MOTOR
+  // TODO(ben): limit speed of motors?
+  smb_->setVelocity(wheel_velocities->data[0] * wheel_velocity_factor_, 1);
+  smb_->setVelocity(wheel_velocities->data[0] * wheel_velocity_factor_, 2);
+
+}
+
 // callback for twist messages that send a velocity command to wheels
 void SmbControllerV2::twistCallback(const geometry_msgs::TwistConstPtr& twist) {
   VLOG(4) << "twistCallback - currently not ACTIVE!";

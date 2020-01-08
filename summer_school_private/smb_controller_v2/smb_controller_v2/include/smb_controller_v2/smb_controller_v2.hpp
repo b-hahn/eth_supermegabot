@@ -3,14 +3,15 @@
 #include <chrono>
 #include <mutex>
 
-// #include <smb_msgs/SmbCommands.h>
-#include <glog/logging.h>
-#include <ros/ros.h>
-
 #include <boost/bind.hpp>
-#include <std_msgs/Float32.h>
 #include <geometry_msgs/Twist.h>
+#include <glog/logging.h>
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+#include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
+#include <std_msgs/Float32.h>
+#include <std_msgs/Float32MultiArray.h>
 
 #include "SmbModes.hpp"
 #include <smb_driver/SmbController.h>
@@ -29,7 +30,11 @@ public:
   void cleanup();
   void preCleanup();
 
-  void wheelVelocityCallback(const std_msgs::Float32ConstPtr& wheel_velocity);
+  void
+  wheelVelocityCallback(const std_msgs::Float32ConstPtr &right_wheel_velocity,
+                        const std_msgs::Float32ConstPtr &left_wheel_velocity);
+  void wheelVelocitiesCallback(
+      const std_msgs::Float32MultiArrayConstPtr &wheel_velocities);
   void twistCallback(const geometry_msgs::TwistConstPtr& twist);
   void joystickCallback(const sensor_msgs::JoyConstPtr& joystick_input);
 
