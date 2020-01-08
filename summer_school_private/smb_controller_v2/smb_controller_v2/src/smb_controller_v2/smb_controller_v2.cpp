@@ -88,8 +88,8 @@ void SmbControllerV2::run()
 // callback for twist messages that send a velocity command to wheels
 void SmbControllerV2::wheelVelocityCallback(const std_msgs::Float32ConstPtr& wheel_velocity) {
   VLOG(4) << "wheelVelocityCallback - vel = " << *wheel_velocity;
-  smb_->setVelocity(wheel_velocity * wheel_velocity_factor_, 0);
-  smb_->setVelocity(wheel_velocity * wheel_velocity_factor_, 1);
+  smb_->setVelocity(wheel_velocity->data * wheel_velocity_factor_, 0);
+  smb_->setVelocity(wheel_velocity->data * wheel_velocity_factor_, 1);
 
 }
 // callback for twist messages that send a velocity command to wheels
